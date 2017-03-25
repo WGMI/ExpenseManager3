@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:text="TextView"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/category"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+    <TextView
+        android:text="TextView"
+        android:textSize="25dp"
+        android:textColor="#00AA00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/category"
+        android:layout_alignLeft="@+id/category"
+        android:layout_alignStart="@+id/category"
+        android:layout_marginTop="12dp"
+        android:id="@+id/amount"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/amount"
+        android:layout_alignLeft="@+id/amount"
+        android:layout_alignStart="@+id/amount"
+        android:layout_marginTop="15dp"
+        android:id="@+id/scrollView3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:text="No Notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/notes"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_alignTop="@+id/amount"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="27dp"
+        android:layout_marginEnd="27dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        app:srcCompat="@mipmap/edit"
+        android:layout_marginTop="16dp"
+        android:id="@+id/edit"
+        android:layout_below="@+id/scrollView3"
+        android:layout_alignLeft="@+id/scrollView3"
+        android:layout_alignStart="@+id/scrollView3" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        app:srcCompat="@mipmap/delete"
+        android:layout_alignTop="@+id/edit"
+        android:layout_alignRight="@+id/date"
+        android:layout_alignEnd="@+id/date"
+        android:id="@+id/delete" />
+</RelativeLayout>
