@@ -221,12 +221,26 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addCategory(Category category){
+    public Long addCategory(Category category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(CATEGORY_NAME,category.getName());
-        values.put(CATEGORY_NAME,category.getType());
-        db.insert(CATEGORIES_TABLE,null,values);
+        values.put(CATEGORY_TYPE,category.getType());
+        return db.insert(CATEGORIES_TABLE,null,values);
+    }
+
+    public int countCategories(){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + CATEGORIES_TABLE;
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+        if(cursor.getCount() > 0){
+            return 1;//return cursor.getCount();
+        } else{
+            return 0;
+        }
     }
 
     public Category getCategory(int id){
@@ -237,6 +251,19 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         Category category = new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+        cursor.close();
+        return category;
+    }
+
+    public Category getACategory(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(CATEGORIES_TABLE, null, ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null){
+            cursor.moveToFirst();
+        }
+
+        Category category = new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(1));
         cursor.close();
         return category;
     }

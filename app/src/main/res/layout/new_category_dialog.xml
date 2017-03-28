@@ -86,14 +86,14 @@
         android:layout_alignLeft="@+id/spinner3"
         android:layout_alignStart="@+id/spinner3"
         android:layout_marginTop="17dp"
-        android:id="@+id/editText6"
+        android:id="@+id/name"
         android:hint="Name" />
 
     <Button
         android:text="Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText6"
+        android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/spinner3"
         android:layout_toEndOf="@+id/spinner3"
         android:layout_marginLeft="31dp"

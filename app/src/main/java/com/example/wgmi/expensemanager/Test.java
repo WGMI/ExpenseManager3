@@ -31,6 +31,7 @@ public class Test extends AppCompatActivity {
 
     DBHandler handler = new DBHandler(this);
     Transaction t;
+    Button button;
     TextView a,c,d,n,i,ty;
     String start,end;
 
@@ -42,7 +43,7 @@ public class Test extends AppCompatActivity {
         List<Transaction> transactions = handler.getTransactionList();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner2);
-        Button button = (Button)findViewById(R.id.button);
+        button = (Button)findViewById(R.id.button);
 
         Calendar ca = Calendar.getInstance();
         //ca.set(Calendar.HOUR_OF_DAY, 0);
@@ -82,14 +83,17 @@ public class Test extends AppCompatActivity {
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(new Intent(Test.this,Charts.class));
+                handler.addCategory(new Category("Other","income"));
+                handler.addCategory(new Category("Salary","income"));
+                button.setText(String.valueOf(handler.addCategory(new Category("Salary","income"))));
                 return true;
             }
         });
 
         DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 
-        button.setText(String.valueOf(handler.sumCategory("income","Salary","22/03/17","21/03/17")));
+        //button.setText(handler.getCategory(0).getId() + " " + handler.getCategory(0).getName() + " " + handler.getCategory(0).getType());
+        //button.setText(handler.countCategories());
 
         a = (TextView) findViewById(R.id.amount);
         c = (TextView) findViewById(R.id.category);
