@@ -123,7 +123,7 @@ public class Overview extends AppCompatActivity
                 fragment = new ChartsFragment();
                 break;
             case R.id.nav_manage:
-                fragment = new NewIncomeTest();
+                fragment = new Settings();
                 break;
         }
 

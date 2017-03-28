@@ -24,6 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
     private static final String DB = "ExpenseManager";
+
     private static final String TRANSACTIONS_TABLE = "transactions";
     private static final String ID = "id";
     private static final String AMOUNT = "amount";
@@ -31,6 +32,11 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATE = "date";
     private static final String NOTE = "note";
     private static final String TYPE = "type";
+
+    private static final String CATEGORIES_TABLE = "categories";
+    private static final String CAT_ID = "id";
+    private static final String CATEGORY_NAME = "name";
+    private static final String CATEGORY_TYPE = "type";
 
     public DBHandler(Context context) {
         super(context, DB, null, VERSION);
@@ -46,12 +52,21 @@ public class DBHandler extends SQLiteOpenHelper {
                 + NOTE + " TEXT,"
                 + TYPE + " TEXT"
                 + ")";
+
+        String query2 = "CREATE TABLE " + CATEGORIES_TABLE + "("
+                + CAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CATEGORY_NAME + " TEXT,"
+                + CATEGORY_TYPE + " TEXT"
+                + ")";
+
         db.execSQL(query);
+        db.execSQL(query2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TRANSACTIONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CATEGORIES_TABLE);
         onCreate(db);
     }
 
@@ -205,4 +220,41 @@ public class DBHandler extends SQLiteOpenHelper {
         );
         db.close();
     }
+
+    public void addCategory(Category category){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(CATEGORY_NAME,category.getName());
+        values.put(CATEGORY_NAME,category.getType());
+        db.insert(CATEGORIES_TABLE,null,values);
+    }
+
+    public Category getCategory(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(CATEGORIES_TABLE,null,CAT_ID + "=?",new String[]{ String.valueOf(id) },null,null,null,null);
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        Category category = new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+        cursor.close();
+        return category;
+    }
+
+    public List<Category> getCategoryList(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Category> categories = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CATEGORIES_TABLE,null);
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        for(int x=0;x<cursor.getCount();x++){
+            categories.add(new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+            cursor.moveToNext();
+        }
+
+        return categories;
+    }
 }
+
