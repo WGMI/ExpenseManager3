@@ -22,7 +22,7 @@ import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DB = "ExpenseManager";
 
     private static final String TRANSACTIONS_TABLE = "transactions";
@@ -237,16 +237,16 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
         if(cursor.getCount() > 0){
-            return 1;//return cursor.getCount();
+            return cursor.getCount();
         } else{
             return 0;
         }
     }
 
     public Category getCategory(int id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(CATEGORIES_TABLE,null,CAT_ID + "=?",new String[]{ String.valueOf(id) },null,null,null,null);
-        if(cursor != null){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CATEGORIES_TABLE + " WHERE id = " + id,null);
+        if (cursor != null){
             cursor.moveToFirst();
         }
 
@@ -255,17 +255,37 @@ public class DBHandler extends SQLiteOpenHelper {
         return category;
     }
 
-    public Category getACategory(int id){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(CATEGORIES_TABLE, null, ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null){
+    /*public Category getCategoryByName(String category_name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from categories where name = '" + category_name + "'",null);
+        if(cursor != null){
             cursor.moveToFirst();
         }
 
-        Category category = new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(1));
-        cursor.close();
-        return category;
+        if(cursor.getCount() > 0){
+            return new Category(cursor.getString(1),cursor.getString(2));
+        } else{
+            return new Category("","");
+        }
+    }*/
+
+    public Boolean getCategoryByName(String category_name,String type) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        /*Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + CATEGORIES_TABLE
+                        + " WHERE "
+                        + CATEGORY_NAME + " = '" + category_name + "'"
+                ,null);*/
+        Cursor cursor = db.rawQuery("select * from categories where name = '" + category_name + "' AND type = '" + type + "'",null);
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        if(cursor.getCount() > 0){
+            return true;
+        } else{
+            return false;
+        }
     }
 
     public List<Category> getCategoryList(){
@@ -282,6 +302,11 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         return categories;
+    }
+
+    public void dc(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(CATEGORIES_TABLE,null,null);
     }
 }
 

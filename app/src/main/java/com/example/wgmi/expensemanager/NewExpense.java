@@ -70,12 +70,14 @@ public class NewExpense extends Fragment {
         Button save = (Button) view.findViewById(R.id.save);
         Button cancel = (Button) view.findViewById(R.id.cancel);
 
+        List<Category> allCategories = handler.getCategoryList();
         List<String> categories = new ArrayList<>();
-        categories.add("Other");
-        categories.add("Clothes");
-        categories.add("Rent");
-        categories.add("Entertainment");
-        categories.add("Food");
+
+        for(Category c : allCategories){
+            if(c.getType().equals("Expense")){
+                categories.add(c.getName());
+            }
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),android.R.layout.simple_spinner_item,categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

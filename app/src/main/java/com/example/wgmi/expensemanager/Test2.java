@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -48,15 +50,22 @@ public class Test2 extends AppCompatActivity {
     public List<Double> amounts;
     DBHandler handler;
 
+    EditText et_name,et_type;
+    String name,type;
+    Button add;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test2);
 
+
         handler = new DBHandler(this);
+        tx = (TextView) findViewById(R.id.textView5);
+        /*
         transactions = handler.getTransactionList();
         fewerTransactions = new ArrayList<>();
-        tx = (TextView) findViewById(R.id.textView5);
+
 
         amounts = new ArrayList<>();
         amounts.add(handler.sumCategory("income","Other","01/01/27","01/01/07"));
@@ -145,6 +154,42 @@ public class Test2 extends AppCompatActivity {
                 }
             }
         });*/
+
+        List<Category> categories = handler.getCategoryList();
+        List<String> incomeList = new ArrayList<>();
+        List<String> expenseList = new ArrayList<>();
+
+        name = "";
+        for(Category c : categories){
+            if(c.getType().equals("Income")){
+                incomeList.add(c.getName());
+                name += c.getName() + "\n";
+            } else{
+                expenseList.add(c.getName());
+            }
+        }
+
+        tx.setText(name);
+
+        et_name = (EditText) findViewById(R.id.name);
+        et_type = (EditText) findViewById(R.id.type);
+        add = (Button) findViewById(R.id.add);
+
+        /*add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name = et_name.getText().toString();
+                type = et_type.getText().toString();
+                Category category = new Category(name,type);
+                //add.setText(handler.getCategory(2).getName() + " " + handler.getCategory(2).getType());
+                //
+                Long id = handler.addCategory(category);
+                int i = Integer.parseInt(String.valueOf(id));
+                Category c = handler.getCategory(i);
+                Toast.makeText(Test2.this,c.getName() + " " + c.getType(),Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
     }
 
     /*public void updateDisplay(){

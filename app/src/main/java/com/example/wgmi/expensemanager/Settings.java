@@ -26,6 +26,7 @@ import java.util.List;
 public class Settings extends Fragment {
 
     View view;
+    DBHandler handler;
     Context context;
     Dialog dialog;
     String type,category_name;
@@ -40,6 +41,7 @@ public class Settings extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.settings, container, false);
         context = this.getActivity();
+        handler = new DBHandler(context);
         Button add = (Button) view.findViewById(R.id.add);
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +81,13 @@ public class Settings extends Fragment {
                             et_name.setError("Name is required");
                         } else{
                             category_name = et_name.getText().toString();
+                            if(handler.getCategoryByName(category_name,type)){
+                                et_name.setError("That category already exists");
+                            } else{
+                                handler.addCategory(new Category(category_name,type));
+                                Toast.makeText(context,"New " + type + " category '" + category_name + "' added",Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
                         }
                     }
                 });

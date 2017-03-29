@@ -67,12 +67,14 @@ public class NewIncome extends Fragment {
         Button save = (Button) view.findViewById(R.id.save);
         final Button cancel = (Button) view.findViewById(R.id.cancel);
 
+        List<Category> allCategories = handler.getCategoryList();
         List<String> categories = new ArrayList<>();
-        categories.add("Other");
-        categories.add("Salary");
-        categories.add("Business");
-        categories.add("Odd Jobs");
-        categories.add("Asset Income");
+
+        for(Category c : allCategories){
+            if(c.getType().equals("Income")){
+                categories.add(c.getName());
+            }
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),android.R.layout.simple_spinner_item,categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

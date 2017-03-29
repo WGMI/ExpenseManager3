@@ -71,21 +71,18 @@ public class Test extends AppCompatActivity {
                 notes.setText("\n\n" + t.get_notes() + "\n\n");
 
                 dialog.show();*/
-                t.set_category("qwerty");
-                t.set_amount(7000.0);
-                //handler.updateRecord(t);
-                finish();
                 //startActivity(getIntent());
-                startActivity(new Intent(Test.this,Overview.class));
+                startActivity(new Intent(Test.this,Test2.class));
             }
         });
 
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                handler.addCategory(new Category("Other","income"));
+                /*handler.addCategory(new Category("Other","income"));
                 handler.addCategory(new Category("Salary","income"));
-                button.setText(String.valueOf(handler.addCategory(new Category("Salary","income"))));
+                button.setText(String.valueOf(handler.addCategory(new Category("Salary","income"))));*/
+                //handler.dc();
                 return true;
             }
         });
