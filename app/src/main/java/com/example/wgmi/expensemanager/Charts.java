@@ -21,9 +21,10 @@ import java.util.Random;
 public class Charts extends AppCompatActivity {
 
     DBHandler handler;
-    public List<Double> amounts;
-    public String[] categories;
     PieChart pieChart;
+    Double[] y;
+    String[] x;// = {"First","Second","Third","Fourth"};
+    String type,from,to;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +33,31 @@ public class Charts extends AppCompatActivity {
 
         handler = new DBHandler(this);
 
-        amounts = new ArrayList<>();
-        amounts.add(handler.sumCategory("income","Other","01/01/18","01/01/17"));
-        amounts.add(handler.sumCategory("income","Salary","01/01/18","01/01/17"));
-        amounts.add(handler.sumCategory("income","Business","01/01/18","01/01/17"));
-        amounts.add(handler.sumCategory("income","Odd Jobs","01/01/18","01/01/17"));
-        amounts.add(handler.sumCategory("income","Asset Income","01/01/18","01/01/17"));
-        /*amounts.add(12d);
-        amounts.add(12d);
-        amounts.add(12d);
-        amounts.add(12d);
-        amounts.add(12d);*/
+        Bundle bundle = getIntent().getExtras();
 
-        categories = new String[5];
-        categories[0] = "Other";
-        categories[1] = "Salary";
-        categories[2] = "Business";
-        categories[3] = "Odd Jobs";
-        categories[4] = "Asset Income";
+        if(bundle != null){
+            type = bundle.getString("type");
+            from = bundle.getString("from");
+            to = bundle.getString("to");
+        }
+
+        //List<Double> a = handler.getAmountsForChart();
+        List<Double> a = handler.getAmountsForChart(type,to,from);
+        Double[] amounts = new Double[a.size()];
+        a.toArray(amounts);
+        y = amounts;
+
+        List<String> b = new ArrayList<>();//handler.getLabelsForChart();
+        List<Category> cats = handler.getCategoryListByType(type);
+        for(Category c : cats){
+            b.add(c.getName());
+        }
+
+        String[] labels = new String[b.size()];
+        b.toArray(labels);
+        x = labels;
+
+        pieChart = (PieChart) findViewById(R.id.chart);
 
         pieChart = (PieChart) findViewById(R.id.chart);
         pieChart.setRotationEnabled(true);
@@ -59,47 +67,21 @@ public class Charts extends AppCompatActivity {
         pieChart.setCenterTextSize(10);
 
         addDataSet();
-
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry entry, int i, Highlight highlight) {
-                Toast.makeText(Charts.this,entry.toString(),Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-
-        /*ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry())
-
-        PieDataSet dataset = new PieDataSet(entries, "Expenses");
-
-        ArrayList<String> labels = new ArrayList<String>();
-        for(Transaction t : transactions){
-            labels.add(t.get_category());
-        }
-
-        PieData data = new PieData(labels, dataset);
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
-        pieChart.setDescription("Description");
-        pieChart.setData(data);
-
-        pieChart.animateY(5000);*/
     }
 
-    private void addDataSet() {
-        ArrayList<Entry> yValues = new ArrayList<>();
-        ArrayList<String> xValues = new ArrayList<>();
+    private void addDataSet(){
+        ArrayList<Entry> yEntries = new ArrayList<>();
+        ArrayList<String> xEntries = new ArrayList<>();
 
-        for(int x=0;x<amounts.size();x++){
-            yValues.add(new Entry(Float.parseFloat(String.valueOf(amounts.get(x))),x));
-            xValues.add(categories[x]);
+        for(int i=0;i<y.length;i++){
+            yEntries.add(new Entry(Float.parseFloat(String.valueOf(y[i])),i));
         }
 
-        PieDataSet dataset = new PieDataSet(yValues,"Income");
+        for(int i=0;i<x.length;i++){
+            xEntries.add(x[i]);
+        }
+
+        PieDataSet dataset = new PieDataSet(yEntries,type + " Chart");
         dataset.setSliceSpace(0);
         dataset.setValueTextSize(12);
 
@@ -117,7 +99,7 @@ public class Charts extends AppCompatActivity {
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
 
-        PieData data = new PieData(xValues,dataset);
+        PieData data = new PieData(xEntries,dataset);
         pieChart.setData(data);
         pieChart.invalidate();
         pieChart.animateY(5000);
