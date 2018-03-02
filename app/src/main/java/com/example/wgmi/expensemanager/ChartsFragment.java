@@ -186,7 +186,7 @@ public class ChartsFragment extends Fragment {
                         bundle.putString("type",type);
                         bundle.putString("from",fromDateView.getText().toString());
                         bundle.putString("to",toDateView.getText().toString());
-                        Intent intent = new Intent(context,Test2.class);
+                        Intent intent = new Intent(context,Charts.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }

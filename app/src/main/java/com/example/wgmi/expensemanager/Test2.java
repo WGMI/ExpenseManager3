@@ -51,7 +51,7 @@ public class Test2 extends AppCompatActivity {
     DBHandler handler;
 
     EditText et_name,et_type;
-    String name,type;
+    String name,type,amount;
     Button add;
 
     @Override
@@ -160,20 +160,22 @@ public class Test2 extends AppCompatActivity {
         List<String> expenseList = new ArrayList<>();
 
         name = "";
-        for(Category c : categories){
-            if(c.getType().equals("Income")){
-                incomeList.add(c.getName());
-                name += c.getName() + "\n";
-            } else{
-                expenseList.add(c.getName());
-            }
+        amount = "";
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null){
+            name = bundle.getString("type") + " " + bundle.getString("from") + " " + bundle.getString("to");
+            //a = a.toLowerCase();
         }
 
-        tx.setText(name);
+        tx.setText(name + amount);
 
         et_name = (EditText) findViewById(R.id.name);
         et_type = (EditText) findViewById(R.id.type);
         add = (Button) findViewById(R.id.add);
+
+
 
         /*add.setOnClickListener(new View.OnClickListener() {
             @Override

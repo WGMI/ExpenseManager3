@@ -255,6 +255,22 @@ public class DBHandler extends SQLiteOpenHelper {
         return category;
     }
 
+    public List<Category> getCategoryListByType(String type){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Category> categories = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CATEGORIES_TABLE + " WHERE type = '" + type + "'",null);
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        for(int x=0;x<cursor.getCount();x++){
+            categories.add(new Category(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+            cursor.moveToNext();
+        }
+
+        return categories;
+    }
+
     /*public Category getCategoryByName(String category_name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from categories where name = '" + category_name + "'",null);
@@ -307,6 +323,16 @@ public class DBHandler extends SQLiteOpenHelper {
     public void dc(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(CATEGORIES_TABLE,null,null);
+    }
+
+    public List<Double> getAmountsForChart(String type, String to, String from){
+        List<Category> c = getCategoryListByType(type);
+        List<Double> amounts = new ArrayList<>();
+        for(Category cat : c){
+            String t = (type.equals("Income")) ? "income":"expense";
+            amounts.add(sumCategory("income",cat.getName(),to,from));
+        }
+        return amounts;
     }
 }
 
